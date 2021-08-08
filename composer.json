@@ -1,0 +1,24 @@
+{
+    "name": "whatwedo/import-bundle",
+    "type": "symfony-bundle",
+    "description": "Very simple Import",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Maurizio Monticelli",
+            "email": "maurizio@whatwedo.ch"
+        }
+    ],
+    "require": {
+        "php":                      ">=7.2",
+        "symfony/validator":                      "^5.0",
+        "symfony/property-info":                      "^5.0",
+        "symfony/options-resolver":                      "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "whatwedo\\ImportBundle\\": ""
+        }
+    }
+}
