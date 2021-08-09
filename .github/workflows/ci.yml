@@ -1,0 +1,29 @@
+name: importBundle
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    steps:
+      #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
+      # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
+      # uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+        with:
+          php-version: '8.0'
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Create Database
+        run: |
+          mkdir -p var
+          touch var/app.db
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DATABASE_URL: sqlite:///%kernel.project_dir%/var/app.db
+        run: vendor/bin/simple-phpunit
