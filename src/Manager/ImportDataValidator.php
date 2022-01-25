@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace whatwedo\ImportBundle\Manager;
 
+use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use whatwedo\ImportBundle\Definition\DefinitionBuilder;
 use whatwedo\ImportBundle\Definition\ImportColumn;
@@ -33,6 +33,8 @@ class ImportDataValidator
     {
         $validationResult = new ValidationResult();
         $validationResult->setDataRow($dataRow);
+        $constraintCollection = [];
+
         foreach ($definitionBuilder->getConfiguration() as $cellConfiguration) {
             $acronym = $cellConfiguration->getAcronym();
             if ($cellConfiguration->isRequired()) {
@@ -43,7 +45,7 @@ class ImportDataValidator
                             null,
                             [],
                             null,
-                            $acronym,
+                            sprintf('[%s]', $acronym),
                             null,
                             null,
                             self::CODE_REQUIRED
@@ -51,13 +53,9 @@ class ImportDataValidator
                     );
                 }
             }
-            if (isset($dataRow[$acronym]) && $cellConfiguration->hasOption(ImportColumn::OPTION_CONSTRAINTS)) {
-                $violations = $this->validator->validate($dataRow[$acronym], $cellConfiguration->getConstraints());
 
-                /** @var ConstraintViolationInterface $violation */
-                foreach ($violations as $violation) {
-                    $validationResult->add($violation);
-                }
+            if (isset($dataRow[$acronym]) && $cellConfiguration->hasOption(ImportColumn::OPTION_CONSTRAINTS)) {
+                $constraintCollection[$acronym] = $cellConfiguration->getConstraints();
             }
 
             if (isset($dataRow[$acronym]) && $cellConfiguration->hasOption(ImportColumn::OPTION_ALLOWED_VALUES)) {
@@ -76,7 +74,7 @@ class ImportDataValidator
                                 null,
                                 [],
                                 null,
-                                $acronym,
+                                sprintf('[%s]', $acronym),
                                 null,
                                 null,
                                 self::CODE_NOT_ALLOWED
@@ -85,6 +83,12 @@ class ImportDataValidator
                     }
                 }
             }
+        }
+
+        $violations = $this->validator->validate($dataRow, new Collection($constraintCollection));
+
+        foreach ($violations as $violation) {
+            $validationResult->add($violation);
         }
 
         return $validationResult;
