@@ -35,7 +35,7 @@ class TextDataAdapter implements DataAdapterInterface
             $rowItem = [];
             $line = $lines[$i];
             if ($line !== '') {
-                $line = explode($this->cellDeliiter, $line);
+                $line = explode($this->cellDeliiter, trim($line));
                 $line = array_map(fn ($item) => $this->cleanDelimiter($item), $line);
 
                 foreach ($headers as $headerIndex => $headerKey) {
