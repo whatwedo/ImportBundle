@@ -1,0 +1,142 @@
+{% macro importForm(form) %}
+    <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+        {{ form_start(form, { attr: { id: 'crud_main_form', class: 'whatwedo_crud-form whatwedo_crud-form--edit flex-grow' } }) }}
+
+        <div class="whatwedo_crud-blocks whatwedo_crud-blocks--edit h-full bg-neutral-50 p-4 flex flex-wrap items-baseline">
+            {{ form_widget(form) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endmacro  %}
+
+{% macro entityValidatorErrors(entityValidatorErrors ) %}
+    <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+        {% if entityValidatorErrors is defined %}
+        <h2 class="p-4 text-lg font-semibold">{{ 'whatwedo_import.entity_validation_errors'|trans }} ({{ entityValidatorErrors|length }})</h2>
+        <table class="table-auto m-4">
+            <tr>
+                <th>#</th>
+                <th></th>
+            </tr>
+            {% for rowNumber, errorList in entityValidatorErrors %}
+                <tr class="align-top">
+                    <td class="align-top">{{ rowNumber }}</td>
+                    <td class="align-top">
+                        {% for violation in errorList %}
+                            {% if violation.propertyPath  %}
+                                <b>{{ 'whatwedo_import.property'|trans }}:</b> {{ violation.propertyPath }}
+                            {% endif %}
+                            {% if violation.invalidValue  %}
+                                <b>{{ 'whatwedo_import.value'|trans }}:</b> {{ violation.invalidValue }}
+                            {% endif %}
+                            <b>{{ 'whatwedo_import.message'|trans }}:</b> {{ violation.message }}<br>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+{% endmacro %}
+
+
+{% macro help(definitionBuilder ) %}
+    <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+        <h2 class="p-4 text-lg font-semibold">{{ 'whatwedo_import.help'|trans }}</h2>
+        <table class="border-collapse border border-slate-500 p-4 m-4">
+            <tr>
+                <th class="border border-slate-600 text-left align-top p-2">{{ 'whatwedo_import.header'|trans }}</th>
+                {% for config in definitionBuilder.getConfiguration %}
+                    <th class="border border-slate-600 text-left p-2">{{ config.acronym }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th class="border border-slate-600 text-left p-2 align-top">{{ 'whatwedo_import.required'|trans }}</th>
+                {% for config in definitionBuilder.getConfiguration %}
+                    <td class="border border-slate-600 text-left p-2">
+                        {% if config.required %}
+                            ✅
+                        {% else %}
+                            ⛔
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th class="border border-slate-600 text-left p-2 align-top">{{ 'whatwedo_import.help'|trans }}</th>
+                {% for config in definitionBuilder.getConfiguration %}
+                    <td class="border border-slate-600 p-2">
+                        {% if config.help %}
+                            {{ config.help }}<br>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th class="border border-slate-600 text-left p-2 align-top">{{ 'whatwedo_import.allowed_values'|trans }}</th>
+                {% for config in definitionBuilder.getConfiguration %}
+                    <td class="border border-slate-600 p-2">
+                        {% set allowedValues = config.allowedValues %}
+                        {% if allowedValues|length %}
+                            <ul>
+                                {% for allowedValue in allowedValues %}
+                                    <li>{{ allowedValue }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+
+    </div>
+{% endmacro %}
+
+{% macro dataValidationErrors(validationErrors, definitionBuilder ) %}
+    <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+        {% if validationErrors is defined %}
+            {% if validationErrors|length %}
+                <h2 class="p-4 text-lg font-semibold">Validation Errors ({{ validationErrors|length }})</h2>
+                <table class="border-collapse border border-slate-500 p-4 m-4">
+                    <tr>
+                        <th class="border border-slate-600 text-left align-top p-2">#</th>
+                        {% for config in definitionBuilder.getConfiguration %}
+                            <th class="border border-slate-600 text-left align-top p-2">{{ config.acronym }}</th>
+                        {% endfor %}
+                    </tr>
+
+                    {% for rowNumber, validationResult in validationErrors %}
+                        <tr>
+                            <td class="border border-slate-600 p-2 align-top">{{ rowNumber }}</td>
+                            {% for key, dataItem in validationResult.getDataRow() %}
+                                <td class="border border-slate-600 p-2 align-top">
+                                    {% if dataItem is iterable %}
+                                        {% for i in dataItem %}
+                                            {{ i }}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ dataItem }}<br>
+                                        {% if validationResult.findByAcronym(key)|length %}
+                                            ⛔
+                                            {% for violation in validationResult.findByAcronym(key) %}
+                                                <code class="text-red-500">{{ violation.message|escape }}</code><br>
+                                            {% endfor %}
+                                        {% else %}
+                                            ✅
+                                        {% endif %}
+
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                </table>
+
+            {% endif %}
+        {% endif %}
+    </div>
+
+{% endmacro %}
+
