@@ -98,10 +98,10 @@ class ImportDataValidator
     {
         $validationErrors = [];
 
-        foreach ($importData as $importRow) {
+        foreach ($importData as $rowNumber => $importRow) {
             $validationError = $this->validate($importRow, $definitionBuilder);
             if ($validationError->count() > 0) {
-                $validationErrors[] = $validationError;
+                $validationErrors[$rowNumber + 2] = $validationError;
             }
         }
 
