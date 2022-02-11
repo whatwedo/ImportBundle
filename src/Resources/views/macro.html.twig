@@ -109,7 +109,9 @@
                     {% for rowNumber, validationResult in validationErrors %}
                         <tr>
                             <td class="border border-slate-600 p-2 align-top">{{ rowNumber }}</td>
-                            {% for key, dataItem in validationResult.getDataRow() %}
+                            {% for config in definitionBuilder.getConfiguration %}
+
+                                {% set dataItem = validationResult.getDataRow()[config.acronym] %}
                                 <td class="border border-slate-600 p-2 align-top">
                                     {% if dataItem is iterable %}
                                         {% for i in dataItem %}
@@ -117,15 +119,14 @@
                                         {% endfor %}
                                     {% else %}
                                         {{ dataItem }}<br>
-                                        {% if validationResult.findByAcronym(key)|length %}
-                                            ⛔
-                                            {% for violation in validationResult.findByAcronym(key) %}
-                                                <code class="text-red-500">{{ violation.message|escape }}</code><br>
-                                            {% endfor %}
-                                        {% else %}
-                                            ✅
-                                        {% endif %}
-
+                                    {% endif %}
+                                    {% if validationResult.findByAcronym(config.acronym)|length %}
+                                        ⛔
+                                        {% for violation in validationResult.findByAcronym(config.acronym) %}
+                                            <code class="text-red-500">{{ violation.message|escape }}</code><br>
+                                        {% endfor %}
+                                    {% else %}
+                                        ✅
                                     {% endif %}
                                 </td>
                             {% endfor %}
