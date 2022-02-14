@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace whatwedo\ImportBundle\Tests\Fixtures\Definition;
+namespace whatwedo\ImportBundle\Tests\App\Definition;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,11 +14,11 @@ use whatwedo\ImportBundle\Importer\CallbackImporter;
 use whatwedo\ImportBundle\Importer\DataImporterInterface;
 use whatwedo\ImportBundle\Model\ImportResultItem;
 use whatwedo\ImportBundle\Prepare\DataAdapterInterface;
-use whatwedo\ImportBundle\Prepare\TextDataAdapter;
-use whatwedo\ImportBundle\Tests\Fixtures\Entity\Department;
-use whatwedo\ImportBundle\Tests\Fixtures\Entity\Event;
+use whatwedo\ImportBundle\Prepare\PhpSpreadSheetDataAdapter;
+use whatwedo\ImportBundle\Tests\App\Entity\Department;
+use whatwedo\ImportBundle\Tests\App\Entity\Event;
 
-final class EventImportDefinition extends AbstractImportDefinition
+final class EventImportSpreadSheetDefinition extends AbstractImportDefinition
 {
     private EntityManagerInterface $entityManager;
 
@@ -123,7 +123,7 @@ final class EventImportDefinition extends AbstractImportDefinition
 
     public function getDataAdapter(): DataAdapterInterface
     {
-        return new TextDataAdapter(PHP_EOL, ';', '"');
+        return new PhpSpreadSheetDataAdapter();
     }
 
     public function getDataImporter(): DataImporterInterface

@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use whatwedo\ImportBundle\Definition\DefinitionBuilder;
 use whatwedo\ImportBundle\Definition\ImportColumn;
 use whatwedo\ImportBundle\Exception\ImportColumnNotDefinedException;
-use whatwedo\ImportBundle\Tests\Fixtures\Definition\EventImportDefinition;
+use whatwedo\ImportBundle\Tests\App\Definition\EventImportDefinition;
 
 class DefinitionBuilderTest extends KernelTestCase
 {
@@ -37,7 +37,7 @@ class DefinitionBuilderTest extends KernelTestCase
         $definitionBuilder = DefinitionBuilder::create($eventImportDefinition);
 
         $this->expectException(ImportColumnNotDefinedException::class);
-        $this->expectExceptionMessage('import column with acronym "gugus" not found in definition "whatwedo\ImportBundle\Tests\Fixtures\Definition\EventImportDefinition"');
+        $this->expectExceptionMessage('import column with acronym "gugus" not found in definition "whatwedo\ImportBundle\Tests\App\Definition\EventImportDefinition"');
         $this->assertInstanceOf(ImportColumn::class, $definitionBuilder->getColumnConfiguration('gugus'));
     }
 }

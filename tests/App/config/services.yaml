@@ -1,0 +1,21 @@
+
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    whatwedo\ImportBundle\Tests\App\:
+        public: true
+        resource: '../*'
+        exclude:
+            - '../config'
+            - '../bin'
+            - '../Entity'
+            - '../Model'
+            - '../public'
+            - '../var'
+
+    whatwedo\ImportBundle\Manager\ImportManager:
+        public: true

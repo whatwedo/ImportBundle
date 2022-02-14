@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace whatwedo\ImportBundle\Tests\Fixtures\Factory;
+namespace whatwedo\ImportBundle\Tests\App\Factory;
 
-use whatwedo\ImportBundle\Tests\Fixtures\Entity\Event;
-use whatwedo\ImportBundle\Tests\Fixtures\Repository\EventRepository;
+use whatwedo\ImportBundle\Tests\App\Entity\Event;
+use whatwedo\ImportBundle\Tests\App\Repository\EventRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;

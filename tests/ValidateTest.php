@@ -9,10 +9,10 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use whatwedo\ImportBundle\Definition\DefinitionBuilder;
 use whatwedo\ImportBundle\Manager\ImportDataValidator;
-use whatwedo\ImportBundle\Tests\Fixtures\Definition\EventImportDefinition;
-use whatwedo\ImportBundle\Tests\Fixtures\Factory\DepartmentFactory;
-use whatwedo\ImportBundle\Tests\Helper\ResetDatabase;
+use whatwedo\ImportBundle\Tests\App\Definition\EventImportDefinition;
+use whatwedo\ImportBundle\Tests\App\Factory\DepartmentFactory;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ValidateTest extends KernelTestCase
 {

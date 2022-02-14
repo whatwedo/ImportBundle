@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace whatwedo\ImportBundle\Tests\Fixtures\Entity;
+namespace whatwedo\ImportBundle\Tests\App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="event")
- * @ORM\Entity(repositoryClass="whatwedo\ImportBundle\Tests\Fixtures\Repository\EventRepository")
+ * @ORM\Entity(repositoryClass="whatwedo\ImportBundle\Tests\App\Repository\EventRepository")
  */
 class Event
 {
@@ -88,20 +88,20 @@ class Event
 
     /**
      * @var Collection|array<Department> One Member has Many Departments
-     * @ORM\ManyToMany(targetEntity="whatwedo\ImportBundle\Tests\Fixtures\Entity\Department", inversedBy="events")
+     * @ORM\ManyToMany(targetEntity="whatwedo\ImportBundle\Tests\App\Entity\Department", inversedBy="events")
      * @ORM\JoinTable(name="`event_department`")
      */
     private $departments;
 
     /**
      * @var Collection|array<self>
-     * @ORM\OneToMany(targetEntity="whatwedo\ImportBundle\Tests\Fixtures\Entity\Event", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="whatwedo\ImportBundle\Tests\App\Entity\Event", mappedBy="parent")
      * @ORM\OrderBy ({"startDate" = "ASC"})
      */
     private $children;
 
     /**
-     * @ORM\ManyToOne(targetEntity="whatwedo\ImportBundle\Tests\Fixtures\Entity\Event", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="whatwedo\ImportBundle\Tests\App\Entity\Event", inversedBy="children")
      * @ORM\JoinColumn(name="`parent_id`", referencedColumnName="id")
      */
     private ?Event $parent = null;

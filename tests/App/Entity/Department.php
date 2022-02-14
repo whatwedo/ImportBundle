@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace whatwedo\ImportBundle\Tests\Fixtures\Entity;
+namespace whatwedo\ImportBundle\Tests\App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="department")
- * @ORM\Entity(repositoryClass="whatwedo\ImportBundle\Tests\Fixtures\Repository\DepartmentRepository")
+ * @ORM\Entity(repositoryClass="whatwedo\ImportBundle\Tests\App\Repository\DepartmentRepository")
  */
 class Department implements \Stringable
 {
@@ -43,7 +43,7 @@ class Department implements \Stringable
      * Many Groups have Many Members.
      *
      * @var Collection|array<Event>
-     * @ORM\ManyToMany(targetEntity="whatwedo\ImportBundle\Tests\Fixtures\Entity\Event", mappedBy="departments")
+     * @ORM\ManyToMany(targetEntity="whatwedo\ImportBundle\Tests\App\Entity\Event", mappedBy="departments")
      */
     private Collection $events;
 

@@ -32,6 +32,7 @@
         "symfony/dependency-injection": "^v6.0",
         "symfony/yaml": "^v6.0",
         "symfony/framework-bundle": "^6.0",
+        "symfony/translation": "^6.0",
         "nyholm/symfony-bundle-test": "^1.8",
         "doctrine/doctrine-bundle": "^2.5.5",
         "whatwedo/php-coding-standard": "dev-develop",
@@ -40,5 +41,10 @@
     },
     "suggest": {
         "phpoffice/phpspreadsheet": "^1.21"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

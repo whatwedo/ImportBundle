@@ -7,12 +7,12 @@ namespace whatwedo\ImportBundle\Tests;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use whatwedo\ImportBundle\Definition\DefinitionBuilder;
-use whatwedo\ImportBundle\Tests\Fixtures\Definition\EventImportDefinition;
-use whatwedo\ImportBundle\Tests\Fixtures\Entity\Department;
-use whatwedo\ImportBundle\Tests\Fixtures\Entity\Event;
-use whatwedo\ImportBundle\Tests\Fixtures\Factory\DepartmentFactory;
-use whatwedo\ImportBundle\Tests\Helper\ResetDatabase;
+use whatwedo\ImportBundle\Tests\App\Definition\EventImportDefinition;
+use whatwedo\ImportBundle\Tests\App\Entity\Department;
+use whatwedo\ImportBundle\Tests\App\Entity\Event;
+use whatwedo\ImportBundle\Tests\App\Factory\DepartmentFactory;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class AllowedFieldsTest extends KernelTestCase
 {

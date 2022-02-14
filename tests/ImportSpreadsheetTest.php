@@ -10,11 +10,11 @@ use whatwedo\ImportBundle\Definition\DefinitionBuilder;
 use whatwedo\ImportBundle\Manager\ImportDataValidator;
 use whatwedo\ImportBundle\Manager\ImportManager;
 use whatwedo\ImportBundle\Model\ImportResultList;
-use whatwedo\ImportBundle\Tests\Fixtures\Definition\EventImportDefinition;
-use whatwedo\ImportBundle\Tests\Fixtures\Definition\EventImportSpreadSheetDefinition;
-use whatwedo\ImportBundle\Tests\Fixtures\Factory\DepartmentFactory;
-use whatwedo\ImportBundle\Tests\Helper\ResetDatabase;
+use whatwedo\ImportBundle\Tests\App\Definition\EventImportDefinition;
+use whatwedo\ImportBundle\Tests\App\Definition\EventImportSpreadSheetDefinition;
+use whatwedo\ImportBundle\Tests\App\Factory\DepartmentFactory;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ImportSpreadsheetTest extends KernelTestCase
 {
@@ -69,6 +69,6 @@ class ImportSpreadsheetTest extends KernelTestCase
 
         $entityManager->flush();
 
-        $this->assertCount(2, $entityManager->getRepository(Fixtures\Entity\Event::class)->findAll());
+        $this->assertCount(2, $entityManager->getRepository(App\Entity\Event::class)->findAll());
     }
 }

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace whatwedo\ImportBundle\Tests\Fixtures\Repository;
+namespace whatwedo\ImportBundle\Tests\App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use whatwedo\ImportBundle\Tests\Fixtures\Entity\Event;
+use whatwedo\ImportBundle\Tests\App\Entity\Event;
 
 /**
  * @method Event|null   find($id, $lockMode = null, $lockVersion = null)
