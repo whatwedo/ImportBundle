@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    {% import '@whatwedoImport/macro.html.twig' as importMacro %}
+
+    {{ importMacro.importForm(form) }}
+
+    {{ importMacro.help(definitionBuilder) }}
+    {% if validationErrors is defined %}
+        {{ importMacro.dataValidationErrors(validationErrors, definitionBuilder) }}
+    {% endif %}
+    {% if entityValidatorErrors is defined %}
+        {{ importMacro.entityValidatorErrors(entityValidatorErrors ) }}
+    {% endif %}
+{% endblock %}
+
+
+

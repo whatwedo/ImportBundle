@@ -14,7 +14,7 @@ class PhpSpreadSheetDataAdapter implements DataAdapterInterface
 
         $sheet = $spreadsheet->getSheet(0);
         $headers = $sheet->rangeToArray('A1:' . $sheet->getHighestColumn() . '1')[0];
-        $data = $sheet->rangeToArray('A2:' . $sheet->getHighestColumn() . $sheet->getHighestRow());
+        $data = $sheet->rangeToArray('A2:' . $sheet->getHighestColumn() . $sheet->getHighestRow($sheet->getHighestColumn()));
 
         $rows = [];
         foreach ($data as $line) {

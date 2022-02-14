@@ -19,4 +19,16 @@ class ValidationResult extends ConstraintViolationList
     {
         return $this->dataRow;
     }
+
+    public function findByAcronym(string $acronym): array
+    {
+        $violations = [];
+        foreach ($this as $violation) {
+            if ($violation->getPropertyPath() === sprintf('[%s]', $acronym)) {
+                $violations[] = $violation;
+            }
+        }
+
+        return $violations;
+    }
 }

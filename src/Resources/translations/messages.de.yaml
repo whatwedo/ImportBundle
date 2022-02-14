@@ -1,0 +1,8 @@
+whatwedo_import.header: Kopfzeile
+whatwedo_import.required: Pflichtfeld
+whatwedo_import.allowed_values: Mögliche Werte
+whatwedo_import.help: Hilfe
+whatwedo_import.entity_validation_errors: Validierung der Entitäten
+whatwedo_import.property: Feld
+whatwedo_import.message: Meldung
+whatwedo_import.value: Wert

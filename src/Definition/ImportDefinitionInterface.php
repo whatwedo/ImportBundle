@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace whatwedo\ImportBundle\Definition;
 
+use Doctrine\ORM\EntityManagerInterface;
 use whatwedo\ImportBundle\Importer\DataImporterInterface;
 use whatwedo\ImportBundle\Prepare\DataAdapterInterface;
 
@@ -26,4 +27,6 @@ interface ImportDefinitionInterface
     public function getDataAdapter(): DataAdapterInterface;
 
     public function getDataImporter(): DataImporterInterface;
+
+    public function persistEntity(object $entity, EntityManagerInterface $entityManager);
 }
