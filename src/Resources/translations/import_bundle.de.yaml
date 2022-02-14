@@ -1,2 +1,3 @@
 value.not_allowed: Wert "%value%" für "%acronym%" nicht zulässig
 value.required: '"%acronym%" ist zwingend'
+value.multidimensional_not_allowed: '"%acronym%" darf nicht Mehrdimensional sein'

@@ -21,8 +21,6 @@ class AllowedFieldsTest extends KernelTestCase
 
     public function testAllowedValueQuery()
     {
-        $this->_resetSchema();
-
         DepartmentFactory::createOne([
             'name' => 'Department 1',
         ]);

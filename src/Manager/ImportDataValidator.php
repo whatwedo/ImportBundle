@@ -18,14 +18,16 @@ class ImportDataValidator
 
     public const CODE_NOT_ALLOWED = 'notAllowed';
 
+    public const CODE_NOT_MULTIDIMENSIONAL = 'multiDimensionalNotAllowed';
+
     private ValidatorInterface $validator;
+
     private TranslatorInterface $translator;
 
     public function __construct(
         ValidatorInterface $validator,
         TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->validator = $validator;
         $this->translator = $translator;
     }
@@ -46,7 +48,7 @@ class ImportDataValidator
                     $validationResult->add(
                         new ConstraintViolation(
                             $this->translator->trans('value.required', [
-                                '%acronym%' => $acronym
+                                '%acronym%' => $acronym,
                             ], 'import_bundle'),
                             null,
                             [],
@@ -58,6 +60,24 @@ class ImportDataValidator
                         )
                     );
                 }
+            }
+
+            // check if multidimensional is allowed
+            if (isset($dataRow[$acronym]) && is_array($dataRow[$acronym]) && ! $cellConfiguration->isMultidimensional()) {
+                $validationResult->add(
+                    new ConstraintViolation(
+                        $this->translator->trans('value.multidimensional_not_allowed', [
+                            '%acronym%' => $acronym,
+                        ], 'import_bundle'),
+                        null,
+                        [],
+                        null,
+                        $acronym,
+                        null,
+                        null,
+                        self::CODE_NOT_MULTIDIMENSIONAL
+                    )
+                );
             }
             if (isset($dataRow[$acronym]) && $cellConfiguration->hasOption(ImportColumn::OPTION_CONSTRAINTS)) {
                 $violations = $this->validator->validate($dataRow[$acronym], $cellConfiguration->getConstraints());
@@ -82,9 +102,8 @@ class ImportDataValidator
                             new ConstraintViolation(
                                 $this->translator->trans('value.not_allowed', [
                                     '%value%' => $value,
-                                    '%acronym%' => $acronym
-                                ], 'import_bundle')
-                                ,
+                                    '%acronym%' => $acronym,
+                                ], 'import_bundle'),
                                 null,
                                 [],
                                 null,

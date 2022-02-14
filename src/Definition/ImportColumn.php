@@ -20,6 +20,8 @@ class ImportColumn
 
     public const OPTION_REQUIRED = 'required';
 
+    public const OPTION_MULTIDIMENSIONAL = 'multidimensional';
+
     public const OPTION_ALLOWED_VALUES = 'allowed_values';
 
     public const OPTION_FORMATTER = 'formatter';
@@ -84,6 +86,11 @@ class ImportColumn
         return $this->options[self::OPTION_REQUIRED];
     }
 
+    public function isMultidimensional(): bool
+    {
+        return $this->options[self::OPTION_MULTIDIMENSIONAL];
+    }
+
     public function getAllowedValues()
     {
         if (is_callable($this->options[self::OPTION_ALLOWED_VALUES])) {
@@ -120,6 +127,7 @@ class ImportColumn
             self::OPTION_PROPERTY_SETTER => null,
             self::OPTION_HELP => null,
             self::OPTION_REQUIRED => false,
+            self::OPTION_MULTIDIMENSIONAL => false,
             self::OPTION_ALLOWED_VALUES => null,
             self::OPTION_CONSTRAINTS => [],
             self::OPTION_FORMATTER => fn ($data) => $data,

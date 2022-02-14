@@ -13,7 +13,6 @@ return [
         'all' => true,
     ],
     whatwedo\ImportBundle\whatwedoImportBundle::class => [
-        'all'
-         => true,
+        'all' => true,
     ],
 ];

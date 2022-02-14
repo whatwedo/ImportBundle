@@ -90,6 +90,36 @@ class ValidateTest extends KernelTestCase
         $this->assertSame('This value is not a valid datetime.', $validationResult->get(0)->getMessage());
     }
 
+    public function testImportValidatorMultidimensional()
+    {
+        DepartmentFactory::createOne([
+            'name' => 'Department 1',
+        ]);
+        DepartmentFactory::createOne([
+            'name' => 'Department 2',
+        ]);
+
+        /** @var ImportDataValidator $importValidator */
+        $importValidator = self::getContainer()->get(ImportDataValidator::class);
+
+        $definitionBuilder = $this->getDefinitionBuilder();
+
+        $importData = [
+            'name' => 'test Date',
+            'startDate' => '21.11.2021 23:00',
+            'endDate' => '21.12.2021 13:00',
+            'department' => [
+                'Department 1',
+                'Department 2',
+            ],
+        ];
+
+        $validationResult = $importValidator->validate($importData, $definitionBuilder);
+
+        $this->assertSame(1, $validationResult->findByCodes(ImportDataValidator::CODE_NOT_MULTIDIMENSIONAL)->count());
+        $this->assertSame('"department" can not be multidimensional', $validationResult->get(0)->getMessage());
+    }
+
     public function testImportValidatorAllowedValue()
     {
         DepartmentFactory::createOne([
@@ -136,7 +166,6 @@ class ValidateTest extends KernelTestCase
 
     public function testImportValidatorAllowedValuetTranslation()
     {
-
         $tranlator = self::getContainer()->get(TranslatorInterface::class);
         $tranlator->setLocale('de');
 

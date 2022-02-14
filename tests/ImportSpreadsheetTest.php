@@ -23,8 +23,6 @@ class ImportSpreadsheetTest extends KernelTestCase
 
     public function testImport()
     {
-        $this->_resetSchema();
-
         DepartmentFactory::createOne([
             'name' => 'Department 1',
         ]);
