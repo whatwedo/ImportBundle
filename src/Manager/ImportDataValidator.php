@@ -7,6 +7,7 @@ namespace whatwedo\ImportBundle\Manager;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use whatwedo\ImportBundle\Definition\DefinitionBuilder;
 use whatwedo\ImportBundle\Definition\ImportColumn;
 use whatwedo\ImportBundle\Model\ValidationResult;
@@ -18,10 +19,15 @@ class ImportDataValidator
     public const CODE_NOT_ALLOWED = 'notAllowed';
 
     private ValidatorInterface $validator;
+    private TranslatorInterface $translator;
 
-    public function __construct(ValidatorInterface $validator)
+    public function __construct(
+        ValidatorInterface $validator,
+        TranslatorInterface $translator
+    )
     {
         $this->validator = $validator;
+        $this->translator = $translator;
     }
 
     public function isValid(array $importData, DefinitionBuilder $definitionBuilder): bool
@@ -39,7 +45,9 @@ class ImportDataValidator
                 if (! isset($dataRow[$acronym])) {
                     $validationResult->add(
                         new ConstraintViolation(
-                            sprintf('"%s" is required', $acronym),
+                            $this->translator->trans('value.required', [
+                                '%acronym%' => $acronym
+                            ], 'import_bundle'),
                             null,
                             [],
                             null,
@@ -72,7 +80,11 @@ class ImportDataValidator
                     if (! in_array($value, $allowedValue, true)) {
                         $validationResult->add(
                             new ConstraintViolation(
-                                sprintf('value "%s" for "%s" is not allowed', $value, $acronym),
+                                $this->translator->trans('value.not_allowed', [
+                                    '%value%' => $value,
+                                    '%acronym%' => $acronym
+                                ], 'import_bundle')
+                                ,
                                 null,
                                 [],
                                 null,

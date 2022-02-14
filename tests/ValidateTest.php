@@ -7,6 +7,7 @@ namespace whatwedo\ImportBundle\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use whatwedo\ImportBundle\Definition\DefinitionBuilder;
 use whatwedo\ImportBundle\Manager\ImportDataValidator;
 use whatwedo\ImportBundle\Tests\App\Definition\EventImportDefinition;
@@ -91,8 +92,6 @@ class ValidateTest extends KernelTestCase
 
     public function testImportValidatorAllowedValue()
     {
-        $this->_resetSchema();
-
         DepartmentFactory::createOne([
             'name' => 'Department 1',
         ]);
@@ -123,6 +122,54 @@ class ValidateTest extends KernelTestCase
         $this->assertSame(1, $validationResult->findByCodes(ImportDataValidator::CODE_NOT_ALLOWED)->count());
         $this->assertSame(ImportDataValidator::CODE_NOT_ALLOWED, $validationResult->get(0)->getCode());
         $this->assertSame('value "test" for "department" is not allowed', $validationResult->get(0)->getMessage());
+
+        $importData = [
+            'name' => 'test Date',
+            'startDate' => '21.12.2021 12:00',
+            'endDate' => '21.12.2021 13:00',
+            'department' => 'Department 1',
+        ];
+
+        $validationResult = $importValidator->validate($importData, $definitionBuilder);
+        $this->assertSame(0, $validationResult->findByCodes(ImportDataValidator::CODE_NOT_ALLOWED)->count());
+    }
+
+    public function testImportValidatorAllowedValuetTranslation()
+    {
+
+        $tranlator = self::getContainer()->get(TranslatorInterface::class);
+        $tranlator->setLocale('de');
+
+        DepartmentFactory::createOne([
+            'name' => 'Department 1',
+        ]);
+        DepartmentFactory::createOne([
+            'name' => 'Department 2',
+        ]);
+        DepartmentFactory::createOne([
+            'name' => 'Department 3',
+        ]);
+        DepartmentFactory::createOne([
+            'name' => 'Department 4',
+        ]);
+
+        /** @var ImportDataValidator $importValidator */
+        $importValidator = self::getContainer()->get(ImportDataValidator::class);
+
+        $definitionBuilder = $this->getDefinitionBuilder();
+
+        $importData = [
+            'name' => 'test Date',
+            'startDate' => '21.12.2021 12:00',
+            'endDate' => '21.12.2021 13:00',
+            'department' => 'test',
+        ];
+
+        $validationResult = $importValidator->validate($importData, $definitionBuilder);
+
+        $this->assertSame(1, $validationResult->findByCodes(ImportDataValidator::CODE_NOT_ALLOWED)->count());
+        $this->assertSame(ImportDataValidator::CODE_NOT_ALLOWED, $validationResult->get(0)->getCode());
+        $this->assertSame('Wert "test" für "department" nicht zulässig', $validationResult->get(0)->getMessage());
 
         $importData = [
             'name' => 'test Date',

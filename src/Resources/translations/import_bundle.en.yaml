@@ -1,0 +1,2 @@
+value.not_allowed: value "%value%" for "%acronym%" is not allowed
+value.required: '"%acronym%" is required'
