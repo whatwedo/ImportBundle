@@ -19,7 +19,7 @@ abstract class AbstractImportDefinition implements ImportDefinitionInterface
 
     public function persistEntity(object $entity, EntityManagerInterface $entityManager)
     {
-        if (!$entityManager->contains($entity)) {
+        if (! $entityManager->contains($entity)) {
             $entityManager->persist($entity);
         }
     }

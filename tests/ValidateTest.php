@@ -134,7 +134,6 @@ class ValidateTest extends KernelTestCase
 
     public function testImportValidatorAllowedValue()
     {
-
         $this->creaeteDepartments();
 
         /** @var ImportDataValidator $importValidator */
