@@ -74,7 +74,7 @@ class ImportDataValidator
                         null,
                         [],
                         null,
-                        $acronym,
+                        sprintf('[%s]', $acronym),
                         null,
                         null,
                         self::CODE_NOT_MULTIDIMENSIONAL

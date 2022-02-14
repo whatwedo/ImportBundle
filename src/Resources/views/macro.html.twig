@@ -114,9 +114,11 @@
                                 {% set dataItem = validationResult.getDataRow()[config.acronym] %}
                                 <td class="border border-slate-600 p-2 align-top">
                                     {% if dataItem is iterable %}
+                                        <ul>
                                         {% for i in dataItem %}
-                                            {{ i }}
+                                            <li>{{ i }}</li>
                                         {% endfor %}
+                                        </ul>
                                     {% else %}
                                         {{ dataItem }}<br>
                                     {% endif %}
