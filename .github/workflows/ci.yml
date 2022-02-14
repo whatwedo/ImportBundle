@@ -2,23 +2,26 @@ name: importBundle
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
 
 jobs:
   phpunit:
     runs-on: ubuntu-latest
     steps:
-      #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
-      # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
-      # uses: shivammathur/setup-php@v2
       - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
         with:
           php-version: '8.0'
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Check Code Styles
+        run: vendor/bin/ecs
       - name: Create Database
         run: |
           mkdir -p var
