@@ -14,7 +14,7 @@ class PhpSpreadSheetDataAdapter implements DataAdapterInterface
 
         $sheet = $spreadsheet->getSheet(0);
         $headers = $sheet->rangeToArray('A1:' . $sheet->getHighestColumn() . '1')[0];
-        $data = $sheet->rangeToArray('A2:' . $sheet->getHighestColumn() . $sheet->getHighestRow($sheet->getHighestColumn()));
+        $data = $sheet->rangeToArray('A2:' . $sheet->getHighestColumn() . $this->getHighestRow($sheet));
 
         $rows = [];
         foreach ($data as $line) {
@@ -55,5 +55,21 @@ class PhpSpreadSheetDataAdapter implements DataAdapterInterface
         }
 
         return $result;
+    }
+
+    protected function getHighestRow(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet): int
+    {
+        $highestColumn = $sheet->getHighestColumn();
+        $highestRow = $sheet->getHighestRow($sheet->getColumnDimensionByColumn(1)->getColumnIndex());
+
+        $i = 1;
+        while ($highestColumn != $sheet->getColumnDimensionByColumn($i)->getColumnIndex()) {
+            $rowHight = $sheet->getHighestRow($sheet->getColumnDimensionByColumn($i++)->getColumnIndex());
+            if ($rowHight > $highestRow) {
+                $highestRow = $rowHight;
+            }
+        }
+
+        return $highestRow;
     }
 }
