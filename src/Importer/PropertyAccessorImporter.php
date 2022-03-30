@@ -17,6 +17,10 @@ class PropertyAccessorImporter implements DataImporterInterface
 {
     private ?PropertyInfoExtractor $propertyInfoExtractor = null;
 
+    private EntityManagerInterface $entityManager;
+
+    private ValidatorInterface $validator;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator

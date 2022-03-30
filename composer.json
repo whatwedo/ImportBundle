@@ -37,7 +37,8 @@
         "doctrine/doctrine-bundle": "^2.5.5",
         "whatwedo/php-coding-standard": "dev-develop",
         "zenstruck/foundry": "^1.16",
-        "phpoffice/phpspreadsheet": "^1.21"
+        "phpoffice/phpspreadsheet": "^1.21",
+        "phpstan/phpstan": "^1.5"
     },
     "suggest": {
         "phpoffice/phpspreadsheet": "^1.21"

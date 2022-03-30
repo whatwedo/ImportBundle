@@ -25,9 +25,20 @@ help:
 install:
 	composer install
 
+
 ## fix php code style
 ecs:
 	vendor/bin/ecs --fix
+
+## check code with phpstan
+phpstan:
+	vendor/bin/phpstan
+
+## check code with all tools
+styles:
+	make ecs
+	make phpstan
+
 
 phpunit: ## PHP Unit
 	vendor/bin/simple-phpunit

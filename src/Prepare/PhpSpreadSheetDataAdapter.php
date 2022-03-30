@@ -31,6 +31,22 @@ class PhpSpreadSheetDataAdapter implements DataAdapterInterface
         return $rows;
     }
 
+    protected function getHighestRow(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet): int
+    {
+        $highestColumn = $sheet->getHighestColumn();
+        $highestRow = $sheet->getHighestRow($sheet->getColumnDimensionByColumn(1)->getColumnIndex());
+
+        $i = 1;
+        while ($highestColumn !== $sheet->getColumnDimensionByColumn($i)->getColumnIndex()) {
+            $rowHight = $sheet->getHighestRow($sheet->getColumnDimensionByColumn($i++)->getColumnIndex());
+            if ($rowHight > $highestRow) {
+                $highestRow = $rowHight;
+            }
+        }
+
+        return $highestRow;
+    }
+
     private function multiDimensional(array $rows): array
     {
         $result = [];
@@ -55,21 +71,5 @@ class PhpSpreadSheetDataAdapter implements DataAdapterInterface
         }
 
         return $result;
-    }
-
-    protected function getHighestRow(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet): int
-    {
-        $highestColumn = $sheet->getHighestColumn();
-        $highestRow = $sheet->getHighestRow($sheet->getColumnDimensionByColumn(1)->getColumnIndex());
-
-        $i = 1;
-        while ($highestColumn != $sheet->getColumnDimensionByColumn($i)->getColumnIndex()) {
-            $rowHight = $sheet->getHighestRow($sheet->getColumnDimensionByColumn($i++)->getColumnIndex());
-            if ($rowHight > $highestRow) {
-                $highestRow = $rowHight;
-            }
-        }
-
-        return $highestRow;
     }
 }

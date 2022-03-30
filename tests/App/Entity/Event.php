@@ -201,9 +201,6 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection|array<self>
-     */
     public function getChildren(): Collection
     {
         return $this->children;

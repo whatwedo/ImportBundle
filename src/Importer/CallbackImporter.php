@@ -9,10 +9,7 @@ use whatwedo\ImportBundle\Model\ImportResultItem;
 
 class CallbackImporter implements DataImporterInterface
 {
-    /**
-     * @var callable
-     */
-    private $callback;
+    private \Closure $callback;
 
     public function __construct(callable $callback)
     {

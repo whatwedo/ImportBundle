@@ -42,7 +42,6 @@ class Department implements \Stringable
     /**
      * Many Groups have Many Members.
      *
-     * @var Collection|array<Event>
      * @ORM\ManyToMany(targetEntity="whatwedo\ImportBundle\Tests\App\Entity\Event", mappedBy="departments")
      */
     private Collection $events;
@@ -77,9 +76,6 @@ class Department implements \Stringable
         $this->color = $color;
     }
 
-    /**
-     * @return: Collection
-     */
     public function getEvents(): Collection
     {
         /** @var ArrayCollection $events */
