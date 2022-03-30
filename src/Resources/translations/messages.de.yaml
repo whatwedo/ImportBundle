@@ -3,6 +3,11 @@ whatwedo_import.required: Pflichtfeld
 whatwedo_import.allowed_values: Mögliche Werte
 whatwedo_import.help: Hilfe
 whatwedo_import.entity_validation_errors: Validierung der Entitäten
+whatwedo_import.data_validation_errors: Validierung der Importdaten
 whatwedo_import.property: Feld
 whatwedo_import.message: Meldung
 whatwedo_import.value: Wert
+whatwedo_import.error: Fehler
+whatwedo_import.row: Zeile
+whatwedo_import.cause: Ursache
+whatwedo_import.unmanaged_object: Unmanaged Object

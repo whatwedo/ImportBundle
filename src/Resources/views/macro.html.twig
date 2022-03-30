@@ -7,7 +7,6 @@
         </div>
         {{ form_end(form) }}
     </div>
-
 {% endmacro  %}
 
 {% macro entityValidatorErrors(entityValidatorErrors ) %}
@@ -16,8 +15,8 @@
         <h2 class="p-4 text-lg font-semibold">{{ 'whatwedo_import.entity_validation_errors'|trans }} ({{ entityValidatorErrors|length }})</h2>
         <table class="table-auto m-4">
             <tr>
-                <th class="border border-slate-600 text-left p-2">Zeile</th>
-                <th class="border border-slate-600 text-left p-2">Fehler</th>
+                <th class="border border-slate-600 text-left p-2">{{ 'whatwedo_import.row'|trans }}</th>
+                <th class="border border-slate-600 text-left p-2">{{ 'whatwedo_import.error'|trans }}</th>
             </tr>
             {% for rowNumber, errorList in entityValidatorErrors %}
                 <tr class="align-top">
@@ -26,13 +25,14 @@
                         <ul>
                         {% for violation in errorList %}
                             <li>
-                            {% if violation.propertyPath  %}
-                                <b>{{ 'whatwedo_import.property'|trans }}:</b> {{ violation.propertyPath }}
-                            {% endif %}
                             {% if violation.invalidValue  %}
-                                <b>{{ 'whatwedo_import.value'|trans }}:</b> {{ violation.invalidValue }}
+                                <strong>{{ 'whatwedo_import.value'|trans }}:</strong> {{ violation.invalidValue }}<br>
                             {% endif %}
-                            <b>{{ 'whatwedo_import.message'|trans }}:</b> {{ violation.message }}
+                                <div class="pl-4">
+                                {% if violation.propertyPath  %}
+                                    <strong>{{ 'whatwedo_import.property'|trans }}:</strong> {{ violation.propertyPath }}
+                                {% endif %}
+                                 <b>{{ 'whatwedo_import.message'|trans }}:</b> {{ violation.message|trans }}
 
                             {% if violation.constraint and
                                 (
@@ -43,22 +43,20 @@
                                     <ul>
                                     {% for cause in violation.cause %}
                                         <li>
+                                            <strong>{{ 'whatwedo_import.cause'|trans }}:</strong>
                                            {% if cause|wwd_crud_entity_has_definition %}
-                                           Ursache: <a href="{{ wwd_crud_entity_path(cause, constant('whatwedo\\CrudBundle\\Enum\\Page::SHOW')) }}" target="_blank">
+                                             <a href="{{ wwd_crud_entity_path(cause, constant('whatwedo\\CrudBundle\\Enum\\Page::SHOW')) }}" target="_blank">
                                                 {{ cause }}
                                             </a>
                                             {% else %}
-                                               Unmanaged Object!!!  {{ cause.class }}
+                                               {{ cause.class }} ({{ 'whatwedo_import.unmanaged_object'|trans  }})
                                             {% endif %}
                                         </li>
                                     {% endfor %}
                                     </ul>
                                 {% endif %}
-
+                                </div>
                             {% endif %}
-
-
-
                             </li>
                         {% endfor %}
                         </ul>
@@ -70,6 +68,52 @@
     </div>
 {% endmacro %}
 
+{% macro dataValidationErrors(validationErrors, definitionBuilder ) %}
+    <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+        {% if validationErrors is defined %}
+            {% if validationErrors|length %}
+                <h2 class="p-4 text-lg font-semibold">{{ 'whatwedo_import.data_validation_errors'|trans }} ({{ validationErrors|length }})</h2>
+                <table class="border-collapse border border-slate-500 p-4 m-4">
+                    <tr>
+                        <th class="border border-slate-600 text-left align-top p-2">{{ 'whatwedo_import.row'|trans }}</th>
+                        {% for config in definitionBuilder.getConfiguration %}
+                            <th class="border border-slate-600 text-left align-top p-2">{{ config.acronym }}</th>
+                        {% endfor %}
+                    </tr>
+
+                    {% for rowNumber, validationResult in validationErrors %}
+                        <tr>
+                            <td class="border border-slate-600 p-2 align-top">{{ rowNumber }}</td>
+                            {% for config in definitionBuilder.getConfiguration %}
+
+                                {% set dataItem = validationResult.getDataRow()[config.acronym] %}
+                                <td class="border border-slate-600 p-2 align-top">
+                                    {% if dataItem is iterable %}
+                                        <ul>
+                                        {% for i in dataItem %}
+                                            <li>{{ i }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        {{ dataItem }}<br>
+                                    {% endif %}
+                                    {% if validationResult.findByAcronym(config.acronym)|length %}
+                                        ⛔
+                                        {% for violation in validationResult.findByAcronym(config.acronym) %}
+                                            <code class="text-red-500">{{ violation.message|escape }}</code><br>
+                                        {% endfor %}
+                                    {% else %}
+                                        ✅
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endmacro %}
 
 {% macro help(definitionBuilder ) %}
     <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
@@ -119,57 +163,5 @@
                 {% endfor %}
             </tr>
         </table>
-
     </div>
 {% endmacro %}
-
-{% macro dataValidationErrors(validationErrors, definitionBuilder ) %}
-    <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
-        {% if validationErrors is defined %}
-            {% if validationErrors|length %}
-                <h2 class="p-4 text-lg font-semibold">Validation Errors ({{ validationErrors|length }})</h2>
-                <table class="border-collapse border border-slate-500 p-4 m-4">
-                    <tr>
-                        <th class="border border-slate-600 text-left align-top p-2">#</th>
-                        {% for config in definitionBuilder.getConfiguration %}
-                            <th class="border border-slate-600 text-left align-top p-2">{{ config.acronym }}</th>
-                        {% endfor %}
-                    </tr>
-
-                    {% for rowNumber, validationResult in validationErrors %}
-                        <tr>
-                            <td class="border border-slate-600 p-2 align-top">{{ rowNumber }}</td>
-                            {% for config in definitionBuilder.getConfiguration %}
-
-                                {% set dataItem = validationResult.getDataRow()[config.acronym] %}
-                                <td class="border border-slate-600 p-2 align-top">
-                                    {% if dataItem is iterable %}
-                                        <ul>
-                                        {% for i in dataItem %}
-                                            <li>{{ i }}</li>
-                                        {% endfor %}
-                                        </ul>
-                                    {% else %}
-                                        {{ dataItem }}<br>
-                                    {% endif %}
-                                    {% if validationResult.findByAcronym(config.acronym)|length %}
-                                        ⛔
-                                        {% for violation in validationResult.findByAcronym(config.acronym) %}
-                                            <code class="text-red-500">{{ violation.message|escape }}</code><br>
-                                        {% endfor %}
-                                    {% else %}
-                                        ✅
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-
-                </table>
-
-            {% endif %}
-        {% endif %}
-    </div>
-
-{% endmacro %}
-
