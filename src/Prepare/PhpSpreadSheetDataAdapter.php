@@ -13,8 +13,9 @@ class PhpSpreadSheetDataAdapter implements DataAdapterInterface
         $spreadsheet = IOFactory::load($fileName);
 
         $sheet = $spreadsheet->getSheet(0);
+        $highestRowAndColumn = $sheet->getHighestRowAndColumn();
         $headers = $sheet->rangeToArray('A1:' . $sheet->getHighestColumn() . '1')[0];
-        $data = $sheet->rangeToArray('A2:' . $sheet->getHighestColumn() . $this->getHighestRow($sheet));
+        $data = $sheet->rangeToArray('A2:' . $highestRowAndColumn['column'] . $highestRowAndColumn['row']);
 
         $rows = [];
         foreach ($data as $line) {
@@ -29,22 +30,6 @@ class PhpSpreadSheetDataAdapter implements DataAdapterInterface
         $rows = $this->multiDimensional($rows);
 
         return $rows;
-    }
-
-    protected function getHighestRow(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet): int
-    {
-        $highestColumn = $sheet->getHighestColumn();
-        $highestRow = $sheet->getHighestRow($sheet->getColumnDimensionByColumn(1)->getColumnIndex());
-
-        $i = 1;
-        while ($highestColumn !== $sheet->getColumnDimensionByColumn($i)->getColumnIndex()) {
-            $rowHight = $sheet->getHighestRow($sheet->getColumnDimensionByColumn($i++)->getColumnIndex());
-            if ($rowHight > $highestRow) {
-                $highestRow = $rowHight;
-            }
-        }
-
-        return $highestRow;
     }
 
     private function multiDimensional(array $rows): array
