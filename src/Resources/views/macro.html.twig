@@ -16,22 +16,52 @@
         <h2 class="p-4 text-lg font-semibold">{{ 'whatwedo_import.entity_validation_errors'|trans }} ({{ entityValidatorErrors|length }})</h2>
         <table class="table-auto m-4">
             <tr>
-                <th>#</th>
-                <th></th>
+                <th class="border border-slate-600 text-left p-2">Zeile</th>
+                <th class="border border-slate-600 text-left p-2">Fehler</th>
             </tr>
             {% for rowNumber, errorList in entityValidatorErrors %}
                 <tr class="align-top">
-                    <td class="align-top">{{ rowNumber }}</td>
-                    <td class="align-top">
+                    <td class="align-top border border-slate-600 text-left p-2">{{ rowNumber }}</td>
+                    <td class="align-top border border-slate-600 text-left p-2">
+                        <ul>
                         {% for violation in errorList %}
+                            <li>
                             {% if violation.propertyPath  %}
                                 <b>{{ 'whatwedo_import.property'|trans }}:</b> {{ violation.propertyPath }}
                             {% endif %}
                             {% if violation.invalidValue  %}
                                 <b>{{ 'whatwedo_import.value'|trans }}:</b> {{ violation.invalidValue }}
                             {% endif %}
-                            <b>{{ 'whatwedo_import.message'|trans }}:</b> {{ violation.message }}<br>
+                            <b>{{ 'whatwedo_import.message'|trans }}:</b> {{ violation.message }}
+
+                            {% if violation.constraint and
+                                (
+                                violation.constraint.service == 'doctrine.orm.validator.unique'
+                                or violation.constraint.service == 'app.validator.valid_person')
+                            %}
+                                {% if violation.cause|length %}
+                                    <ul>
+                                    {% for cause in violation.cause %}
+                                        <li>
+                                           {% if cause|wwd_crud_entity_has_definition %}
+                                           Ursache: <a href="{{ wwd_crud_entity_path(cause, constant('whatwedo\\CrudBundle\\Enum\\Page::SHOW')) }}" target="_blank">
+                                                {{ cause }}
+                                            </a>
+                                            {% else %}
+                                               Unmanaged Object!!!  {{ cause.class }}
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
+
+                            {% endif %}
+
+
+
+                            </li>
                         {% endfor %}
+                        </ul>
                     </td>
                 </tr>
             {% endfor %}
