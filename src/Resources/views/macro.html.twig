@@ -37,7 +37,7 @@
                             {% if violation.constraint and
                                 (
                                 violation.constraint.service == 'doctrine.orm.validator.unique'
-                                or violation.constraint.service == 'app.validator.valid_person')
+                                or violation.constraint.service == 'app.validator.duplicate')
                             %}
                                 {% if violation.cause|length %}
                                     <ul>
